@@ -21,7 +21,7 @@ DML (Data Manipulation Language)
  DELETE (delete from table where condition)
 
 DDL (Data Definition Language)
- CREATE
+ CREATE (CREATE TABLE table_name (column1 datatype,column2 datatype,column3 datatype,....);
  ALTER (alter table table-name add (col1 datatype, col2 datatype……))
  DROP (drop table table-name)
  RENAME (rename old table to new table)
