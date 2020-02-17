@@ -29,7 +29,7 @@ DDL (Data Definition Language)
 DCL (Data Control Language)
  GRANT
  REVOKE
-______________________________________________________
+____________________________________________________
 Types of Keys
  Primary Key
  Unique Key
@@ -37,13 +37,13 @@ Types of Keys
  Candidate Key
  Composite/Compound Key
  Foreign Key
-______________________________________________
+____________________________________________________
 Creating VIEW
 CREATE VIEW view_name AS
 SELECT column1, column2.....
 FROM table_name
 WHERE condition;
-_______________________________________________
+____________________________________________________
 JOINS
 INNER JOIN(SELECT table1.col1,table1.col2,table2.col1,....FROM table1 INNER JOIN table2 ON table1.matching_column = table2.matching_column;)
 LEFT JOIN(SELECT table1.col1,table1.col2,table2.col1,....FROM table1 LEFT JOIN table2 ON table1.matching_column = table2.matching_column;)
