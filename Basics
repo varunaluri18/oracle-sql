@@ -1,3 +1,8 @@
+SQL (Structured Query Language)
+SQL stands for Structured Query Language. SQL is the language used to create, edit and manipulate a
+database. In other words, SQL is used to manage data held within a relational database management
+system (RDBMS).
+
 Types of Data Base Management Systems
 1. Hierarchical databases
 2. Network databases
@@ -7,12 +12,7 @@ Types of Data Base Management Systems
 6. ER model databases
 7. Document databases
 8. NoSQL databases
-
-SQL (Structured Query Language)
-SQL stands for Structured Query Language. SQL is the language used to create, edit and manipulate a
-database. In other words, SQL is used to manage data held within a relational database management
-system (RDBMS).
-
+____________________________________________________
 Types of Languages in SQL
 DML (Data Manipulation Language)
  SELECT (select * from table where condition)
@@ -29,8 +29,7 @@ DDL (Data Definition Language)
 DCL (Data Control Language)
  GRANT
  REVOKE
-
-
+______________________________________________________
 Types of Keys
  Primary Key
  Unique Key
@@ -38,3 +37,10 @@ Types of Keys
  Candidate Key
  Composite/Compound Key
  Foreign Key
+______________________________________________
+Creating VIEW
+CREATE VIEW view_name AS
+SELECT column1, column2.....
+FROM table_name
+WHERE condition;
+
