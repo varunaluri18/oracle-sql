@@ -43,4 +43,9 @@ CREATE VIEW view_name AS
 SELECT column1, column2.....
 FROM table_name
 WHERE condition;
-
+_______________________________________________
+JOINS
+INNER JOIN(SELECT table1.col1,table1.col2,table2.col1,....FROM table1 INNER JOIN table2 ON table1.matching_column = table2.matching_column;)
+LEFT JOIN(SELECT table1.col1,table1.col2,table2.col1,....FROM table1 LEFT JOIN table2 ON table1.matching_column = table2.matching_column;)
+RIGHT JOIN(SELECT table1.col1,table1.col2,table2.col1,....FROM table1 RIGHT JOIN table2 ON table1.matching_column = table2.matching_column;)
+FULL JOIN(SELECT table1.col1,table1.col2,table2.col1,....FROM table1 FULL JOIN table2 ON table1.matching_column = table2.matching_column;)
