@@ -1,0 +1,39 @@
+LOAD
+INFILE 'C:\Users\VarunNagendra\Desktop\training\Oracle SQL\greentaxi\green_tripdata_2019-01.csv'
+INFILE 'C:\Users\VarunNagendra\Desktop\training\Oracle SQL\greentaxi\green_tripdata_2019-02.csv'
+INFILE 'C:\Users\VarunNagendra\Desktop\training\Oracle SQL\greentaxi\green_tripdata_2019-03.csv'
+INFILE 'C:\Users\VarunNagendra\Desktop\training\Oracle SQL\greentaxi\green_tripdata_2019-04.csv'
+INFILE 'C:\Users\VarunNagendra\Desktop\training\Oracle SQL\greentaxi\green_tripdata_2019-05.csv'
+INFILE 'C:\Users\VarunNagendra\Desktop\training\Oracle SQL\greentaxi\green_tripdata_2019-06.csv'
+INFILE 'C:\Users\VarunNagendra\Desktop\training\Oracle SQL\greentaxi\green_tripdata_2019-07.csv'
+INFILE 'C:\Users\VarunNagendra\Desktop\training\Oracle SQL\greentaxi\green_tripdata_2019-08.csv'
+INFILE 'C:\Users\VarunNagendra\Desktop\training\Oracle SQL\greentaxi\green_tripdata_2019-09.csv'
+INFILE 'C:\Users\VarunNagendra\Desktop\training\Oracle SQL\greentaxi\green_tripdata_2019-10.csv'
+INFILE 'C:\Users\VarunNagendra\Desktop\training\Oracle SQL\greentaxi\green_tripdata_2019-11.csv'
+INFILE 'C:\Users\VarunNagendra\Desktop\training\Oracle SQL\greentaxi\green_tripdata_2019-12.csv'
+INTO TABLE GREEN_TAXI
+FIELDS TERMINATED BY ',' OPTIONALLY ENCLOSED BY '"'
+TRAILING NULLCOLS
+(
+	VENDORID ,
+	LPEP_PICKUP_DATETIME DATE 'YYYY-MM-DD HH24:MI:SS',
+	LPEP_DROPOFF_DATETIME 'YYYY-MM-DD HH24:MI:SS', 
+	STORE_AND_FWD_FLAG,
+	RATECODEID,
+	PULOCATIONID,
+	DOLOCATIONID,
+	PASSENGER_COUNT,
+	TRIP_DISTANCE,
+	FARE_AMOUNT,
+	EXTRA,
+	MTA_TAX,
+	TIP_AMOUNT,
+	TOLLS_AMOUNT,
+	EHAIL_FEE,
+	IMPROVEMENT_SURCHARGE,
+	TOTAL_AMOUNT,
+	PAYMENT_TYPE,
+	TRIP_TYPE,
+	CONGESTION_SURCHARGE
+
+)
