@@ -1,0 +1,854 @@
+INTRODUCTION TO PL/SQL AND CURSORS :
+-----------------------------------
+
+2.1.
+
+DECLARE
+V_Sample1 NUMBER(2); 
+V_Sample2 CONSTANT NUMBER(2):=30; 
+V_Sample3 NUMBER(2) NOT NULL; 
+V_Sample4 NUMBER(2) := 50; 
+V_Sample5 NUMBER(2) DEFAULT 25; 
+/
+
+***************************************************************************************************************************************************************************
+
+2.2.
+
+<<OUTER>>
+DECLARE 
+var_num1 NUMBER := 5; 
+BEGIN  
+<<INNER>>
+DECLARE 
+var_num1 NUMBER := 10; 
+BEGIN 
+DBMS_OUTPUT.PUT_LINE('Value for var_num1:'||OUTER.var_num1); 
+--Outer block variable(var_num1) can be printed here by using OUTER.var_num1.
+END; 
+DBMS_OUTPUT.PUT_LINE('Value for var_num1:'||INNER.var_num1); 
+--Inner block variable(var_num1) can be printed here by using INNER.var_num1.
+END; 
+/
+
+***************************************************************************************************************************************************************************
+
+2.3
+
+DECLARE
+s_code staff_master.staff_code%TYPE;
+s_name staff_master.staff_name%TYPE;
+s_sal staff_master.staff_sal%TYPE;
+d_code staff_master.dept_code%TYPE:=&DEPTCODE;
+CURSOR c1 IS SELECT staff_code,staff_name,staff_sal
+FROM staff_master WHERE dept_code=d_code;
+BEGIN
+IF NOT c1%ISOPEN THEN
+OPEN c1;
+END IF;
+LOOP
+FETCH c1 INTO s_code,s_name,s_sal;
+IF c1%FOUND THEN
+DBMS_OUTPUT.PUT_LINE('Value for Code:'||s_code); 
+DBMS_OUTPUT.PUT_LINE('Value for Name:'||s_name); 
+DBMS_OUTPUT.PUT_LINE('Value for Salary:'||s_sal); 
+ELSE
+EXIT;
+END IF;
+END LOOP;
+CLOSE c1;
+END;
+/
+
+***************************************************************************************************************************************************************************
+
+2.4
+
+DECLARE
+d_code NUMBER:=&dept_code;
+s_sal staff_master.staff_sal%TYPE;
+s_name staff_master.staff_name%TYPE;
+v_value NUMBER(10,5);
+CURSOR c1 IS SELECT dept_code,staff_sal,staff_name
+FROM staff_master WHERE dept_code=d_code;
+all_data c1%ROWTYPE;
+BEGIN
+IF NOT c1%ISOPEN THEN
+OPEN c1;
+END IF;
+LOOP
+FETCH c1 INTO all_data;
+v_value:=0.3*s_sal;
+IF(v_value<5000)
+THEN
+s_sal:=s_sal+0.3*s_sal;
+DBMS_OUTPUT.PUT_LINE('sal less than 5000'); 
+ELSE
+s_sal:=s_sal+5000;
+DBMS_OUTPUT.PUT_LINE('sal greater than 5000'); 
+IF c1%FOUND THEN
+DBMS_OUTPUT.PUT_LINE('name:'||all_data.staff_name); 
+DBMS_OUTPUT.PUT_LINE('sal:'||all_data.staff_sal); 
+ELSE
+EXIT;
+END IF;
+END IF;
+END LOOP;
+CLOSE c1;
+END;
+/
+
+***************************************************************************************************************************************************************************
+
+2.5
+
+DECLARE
+d_code student_master.dept_code%TYPE:=&DEPTCODE;
+total NUMBER(5);
+per NUMBER(5,2);
+grade varchar2(4);
+flag NUMBER(2):=0;
+CURSOR c1 IS SELECT s.student_code,s.student_name,s1.subject1,s1.subject2,s1.subject3
+FROM student_master s inner join student_marks s1 
+on(s.student_code=s1.student_code) WHERE s.dept_code=d_code;
+all_data c1%ROWTYPE;
+BEGIN
+IF NOT c1%ISOPEN THEN
+OPEN c1;
+END IF;
+LOOP
+FETCH c1 INTO all_data;
+IF c1%FOUND THEN
+flag:=1;
+IF d_code in(10,20,30,40) THEN
+IF (all_data.subject1>=60 AND all_data.subject2>=60 AND all_data.subject3>=60) THEN
+DBMS_OUTPUT.PUT_LINE('Value for STUDENT CODE:'||all_data.student_code); 
+DBMS_OUTPUT.PUT_LINE('Value for Student Name:'||all_data.student_name); 
+DBMS_OUTPUT.PUT_LINE('Value for Subject1:'||all_data.subject1); 
+DBMS_OUTPUT.PUT_LINE('Value for Subject2:'||all_data.subject2); 
+DBMS_OUTPUT.PUT_LINE('Value for Subject3:'||all_data.subject3); 
+total:=all_data.subject1+all_data.subject2+all_data.subject3;
+per:=total/3;
+DBMS_OUTPUT.PUT_LINE('Value for total marks:'||total); 
+DBMS_OUTPUT.PUT_LINE('Value for percentage:'||per); 
+IF (per>=80) THEN
+DBMS_OUTPUT.PUT_LINE('Grade=A'); 
+ELSIF (per>=70 AND per<80) THEN
+DBMS_OUTPUT.PUT_LINE('Grade=B'); 
+ELSIF (per>=60 AND per<70) THEN
+DBMS_OUTPUT.PUT_LINE('Grade=C'); 
+ELSE
+DBMS_OUTPUT.PUT_LINE('Grade=D'); 
+END IF;
+ELSE
+DBMS_OUTPUT.PUT_LINE('fail'); 
+END IF;
+END IF;
+ELSE
+IF flag=0 THEN
+DBMS_OUTPUT.PUT_LINE('Please enter valid department code'); 
+END IF;
+EXIT;
+END IF;
+END LOOP;
+CLOSE c1;
+END;
+/
+
+***************************************************************************************************************************************************************************
+
+2.6
+
+DECLARE
+d_code staff_master.dept_code%TYPE:=&DEPTCODE;
+CURSOR c1(d_code staff_master.dept_code%TYPE) IS SELECT staff_code,staff_name,staff_sal,design_code,
+staff_dob,hiredate,mgr_code,staff_address
+FROM staff_master WHERE dept_code=d_code;
+all_data c1%ROWTYPE;
+BEGIN
+IF NOT c1%ISOPEN THEN
+OPEN c1(d_code);
+END IF;
+LOOP
+FETCH c1 INTO all_data;
+IF c1%FOUND THEN
+DBMS_OUTPUT.PUT_LINE('Value for Code:'||all_data.staff_code); 
+DBMS_OUTPUT.PUT_LINE('Value for Name:'||all_data.staff_name); 
+DBMS_OUTPUT.PUT_LINE('Value for Salary:'||all_data.staff_sal); 
+DBMS_OUTPUT.PUT_LINE('Value for designation Code:'||all_data.design_code); 
+DBMS_OUTPUT.PUT_LINE('Value for Staff date of birth:'||all_data.staff_dob); 
+DBMS_OUTPUT.PUT_LINE('Value for Staff hiredate:'||all_data.hiredate); 
+DBMS_OUTPUT.PUT_LINE('Value for manager code:'||all_data.mgr_code); 
+DBMS_OUTPUT.PUT_LINE('Value for Staff address:'||all_data.staff_address); 
+ELSE
+EXIT;
+END IF;
+END LOOP;
+CLOSE c1;
+END;
+/
+
+***************************************************************************************************************************************************************************
+
+EXCEPTION HANDLING AND DYNAMIC SQL :
+-----------------------------------
+
+3.1
+
+<<outerBlock>>
+DECLARE 
+var_num1 NUMBER := 5; 
+BEGIN  
+<<innerBlock>>
+DECLARE 
+var_num1 NUMBER := 10; 
+BEGIN 
+DBMS_OUTPUT.PUT_LINE('Value for var_num1:'||outerBlock.var_num1); 
+END; 
+DBMS_OUTPUT.PUT_LINE('Value for var_num1:'||innerBlock.var_num1); 
+END; 
+/
+
+DECLARE
+v_dept_code staff_master.staff_code%TYPE:=&department;
+CURSOR c1 IS SELECT staff_code,staff_name,staff_sal
+FROM staff_master WHERE dept_code=v_dept_code;
+all_data c1%ROWTYPE;
+NO_DATA_FOUND EXCEPTION;
+BEGIN
+IF NOT c1%ISOPEN THEN
+OPEN c1;
+END IF;
+LOOP
+FETCH c1 INTO all_data;
+IF c1%FOUND THEN
+DBMS_OUTPUT.PUT_LINE('Code is'||all_data.staff_code); 
+DBMS_OUTPUT.PUT_LINE('Name is'||all_data.staff_name); 
+DBMS_OUTPUT.PUT_LINE('Salary is'||all_data.staff_sal); 
+EXIT;
+ELSE
+RAISE NO_DATA_FOUND
+END IF;
+END LOOP;
+CLOSE c1;
+EXCEPTION
+WHEN NO_DATA_FOUND THEN
+DBMS_OUTPUT.PUT_LINE('GIVEN CODE IS NOT VALID.ENTER VALID CODE'); 
+END;
+/
+
+DECLARE
+addnum number(20);
+addsal number(20);
+CURSOR c1 IS SELECT staff_sal FROM staff_master group by dept_code,staff_sal;
+all_data c1%ROWTYPE;
+BEGIN
+IF NOT c1%ISOPEN THEN
+OPEN c1;
+END IF;
+LOOP
+FETCH c1 INTO all_data;
+IF c1%FOUND THEN
+addnum:=all_data.staff_sal+5000;
+addsal:=all_data.staff_sal*0.30;
+IF addnum<addsal then
+DBMS_OUTPUT.PUT_LINE(addnum); 
+ELSE
+DBMS_OUTPUT.PUT_LINE(addsal); 
+END IF;
+ELSE
+EXIT;
+END IF;
+END LOOP;
+CLOSE c1;
+END;
+/
+
+***************************************************************************************************************************************************************************
+
+3.2
+
+DECLARE 
+V_BONUS number(5); 
+V_SAL STAFF_MASTER.STAFF_SAL%TYPE;
+CURSOR c1 IS SELECT staff_sal FROM staff_master WHERE mgr_code=100006;
+all_data c1%ROWTYPE;
+BEGIN 
+IF NOT c1%ISOPEN THEN
+OPEN c1;
+END IF;
+LOOP
+FETCH c1 INTO all_data;
+IF c1%FOUND THEN
+V_BONUS:=2*all_data.staff_sal; 
+DBMS_OUTPUT.PUT_LINE('STAFF SALARY IS ' || all_data.staff_sal); 
+DBMS_OUTPUT.PUT_LINE('STAFF BONUS IS ' || V_BONUS);
+END IF;
+END LOOP;
+CLOSE c1;
+EXCEPTION 
+WHEN NO_DATA_FOUND THEN 
+DBMS_OUTPUT.PUT_LINE('GIVEN CODE IS NOT VALID.ENTER VALID CODE'); 
+END;
+/
+
+***************************************************************************************************************************************************************************
+
+3.3
+
+DECLARE 
+V_SAL STAFF_MASTER.STAFF_SAL%TYPE;
+V_BONUS V_SAL%TYPE; 
+CURSOR c IS SELECT staff_sal FROM staff_master WHERE mgr_code=100006;
+BEGIN 
+IF NOT c%ISOPEN THEN
+OPEN c;
+END IF;
+LOOP
+FETCH c INTO v_sal;
+IF c%FOUND THEN
+V_BONUS:=2*V_SAL; 
+DBMS_OUTPUT.PUT_LINE('STAFF SALARY IS ' || V_SAL); 
+DBMS_OUTPUT.PUT_LINE('STAFF BONUS IS ' || V_BONUS); 
+ELSE
+EXIT;
+END IF;
+END LOOP;
+CLOSE c;
+EXCEPTION 
+WHEN NO_DATA_FOUND THEN 
+DBMS_OUTPUT.PUT_LINE('GIVEN CODE IS NOT VALID.ENTER VALID CODE'); 
+END;
+/
+
+***************************************************************************************************************************************************************************
+
+3.4
+
+<<OUTER>>
+BEGIN       
+<<INNER>>
+DECLARE       
+fname emp.ename%TYPE;       
+BEGIN       
+SELECT ename INTO fname       
+FROM emp       
+WHERE empno=deptno;        
+DBMS_OUTPUT.PUT_LINE('This statement will print');       
+EXCEPTION       
+WHEN OTHERS THEN       
+DBMS_OUTPUT.PUT_LINE('Some inner block error');       
+END;  
+EXCEPTION  
+WHEN NO_DATA_FOUND THEN  
+DBMS_OUTPUT.PUT_LINE('No data found in fname');  
+WHEN OTHERS THEN  
+DBMS_OUTPUT.PUT_LINE('Some outer block error');  
+END; 
+/
+
+***************************************************************************************************************************************************************************
+
+3.6
+
+
+DECLARE
+e_no emp.empno%type;
+e_comm emp.comm%type;
+commission_not_found exception;
+BEGIN
+SELECT comm INTO e_comm
+FROM emp
+WHERE empno=7369;
+if e_comm is null then
+raise commission_not_found
+else
+DBMS_OUTPUT.PUT_LINE('Commission:'||e_comm);
+end if;
+EXCEPTION
+WHEN commission_not_found then
+DBMS_OUTPUT.PUT_LINE('commission does not exist for given employee no.'); 
+END;
+/
+
+***************************************************************************************************************************************************************************
+
+DATABASE PROGRAMMING :
+----------------------
+
+4.1
+
+DECLARE
+v_code staff_master.staff_code%TYPE;
+dept_NOT_FOUND EXCEPTION;
+CURSOR c1(v_code staff_master.staff_code%TYPE) IS SELECT max(staff_sal) as maximum,
+staff_name,dept_code FROM staff_master group by(dept_code,staff_sal) HAVING dept_code=&v_code;
+all_data c1%ROWTYPE;
+BEGIN 
+IF NOT c1%ISOPEN THEN
+OPEN c1(v_code);
+END IF;
+LOOP
+FETCH c1 INTO all_data;
+IF c1%FOUND THEN
+DBMS_OUTPUT.PUT_LINE('STAFF NAME IS: ' || all_data.staff_name); 
+DBMS_OUTPUT.PUT_LINE('MAXIMUM STAFF SALARY IS: ' || all_data.maximum);
+EXIT;
+ELSE
+RAISE dept_NOT_FOUND;
+END IF;
+END LOOP;
+CLOSE c1;
+EXCEPTION 
+WHEN dept_NOT_FOUND THEN 
+DBMS_OUTPUT.PUT_LINE('DEPT CODE IS WRONG');
+WHEN OTHERS THEN
+DBMS_OUTPUT.PUT_LINE('CONTACT DBA');
+END;
+/
+
+***************************************************************************************************************************************************************************
+
+4.2
+
+CREATE OR REPLACE FUNCTION FIND_AGE
+(dob varchar2) RETURN NUMBER AS
+age NUMBER(3);
+BEGIN
+SELECT round(months_between(sysdate,to_date(dob,'dd mm yy hh24:mi:ss'))/12)
+AS AGE INTO age FROM dual;
+RETURN age;
+END FIND_AGE;
+DECLARE 
+date varchar2(30):='&DATE';
+age NUMBER(3);
+BEGIN
+age:=FIND_AGE(date);
+DBMS_OUTPUT.PUT_LINE('AGE IS: ' || age);    
+END;
+/
+
+***************************************************************************************************************************************************************************
+
+4.3
+
+CREATE OR REPLACE PROCEDURE STAFF_DETAILS
+(s_code IN staff_master.staff_code%TYPE)IS
+upper_name staff_master.staff_name%TYPE;
+staffName_NOT_FOUND EXCEPTION;
+flag NUMBER(3):=0;
+BEGIN
+UPDATE staff_master SET staff_name=upper(staff_name)
+where staff_code=s_code;
+DBMS_OUTPUT.PUT_LINE('Staff name is updated');    
+flag:=SQL%ROWCOUNT;
+IF(flag=0) THEN
+RAISE staffName_NOT_FOUND;
+END IF;
+EXCEPTION 
+WHEN staffName_NOT_FOUND THEN 
+DBMS_OUTPUT.PUT_LINE('STAFF NAME IS NULL');
+WHEN OTHERS THEN
+DBMS_OUTPUT.PUT_LINE('CONTACT DBA');
+END STAFF_DETAILS;
+/
+
+DECLARE 
+s_code IN staff_master.staff_code%TYPE:=&staffcode;
+BEGIN
+STAFF_DETAILS(S_code);
+END;
+/
+
+***************************************************************************************************************************************************************************
+
+4.5
+
+CREATE OR REPLACE FUNCTION COMPANY_COST
+(s_code staff_master.staff_code%TYPE) RETURN NUMBER AS
+cost NUMBER(10);
+DA NUMBER(10);
+HRA NUMBER(10);
+TA NUMBER(10);
+salary staff_master.staff_sal%TYPE;
+total_salary NUMBER(20);
+exper NUMBER(10);
+STAFF_NOT_FOUND EXCEPTION;
+BEGIN
+SELECT staff_sal,round(months_between(sysdate,hiredate)/12) INTO salary.exper
+FROM staff_master where staff_code=s_code;
+IF SQL%ROWCODE=1 THEN
+DA:=salary*0.15;
+HRA:=salary*0.2;
+TA:=salary*0.8;
+total_salary:=salary+DA+HRA+TA;
+if(exper<1)then
+total_salary:=total_salary;
+elsif(exper>=1 and exper<=2)then
+total_salary:=total_salary+(0.1*salary);
+elsif(exper>=2 and exper<=4)then
+total_salary:=total_salary+(0.2*salary);
+elsif(exper>=4)then
+total_salary:=total_salary+(0.3*salary);
+end if;
+DBMS_OUTPUT.PUT_LINE(TOTAL_SALARY);
+else
+RAISE STAFF_NOT_FOUND;
+END IF;
+EXCEPTION 
+WHEN staffName_NOT_FOUND THEN 
+DBMS_OUTPUT.PUT_LINE('STAFF NAME IS WRONG');
+WHEN OTHERS THEN
+DBMS_OUTPUT.PUT_LINE('CONTACT DBA');
+END COMPANY_COST;
+/
+
+DECLARE 
+S_code staff_master.staff_code%TYPE:=&staffcode;
+total_salary number(30);
+BEGIN
+total_salary:=COMPANY_COST(s_code);
+DBMS_OUTPUT.PUT_LINE('Total cost to the company'||total_salary);
+END;
+/
+
+***************************************************************************************************************************************************************************
+
+4.6
+
+CREATE OR REPLACE PROCEDURE GET_IN IS
+CURSOR C IS SELECT s.staff_name,d.dept_name as dept,de.design_name as design,s.staff_sal,(select avg(staff_sal) FROM staff_master
+where dept_code=s.dept_code) as avg FROM staff_master s
+INNER JOIN department_master d
+ON (s.dept_code=d.dept_code) INNER JOIN designation_master de ON
+(s.design_code=de.design_code);
+ALL_DATA C%ROWTYPE;
+STATUS VARCHAR(20);
+ERROR_occur EXCEPTION;
+BEGIN
+IF NOT C%ISOPEN THEN
+OPEN C;
+END IF;
+LOOP
+FETCH C INTO all_data;
+IF C%FOUND THEN
+IF ALL_DATA.staff_sal>all_data.avg THEN
+STATUS:='Greater';
+ELSIF ALL_DATA.staff_sal<all_data.avg THEN
+STATUS:='Lesser';
+IF ALL_DATA.staff_sal=all_data.avg THEN
+STATUS:='Equal';
+END IF;
+DBMS_OUTPUT.PUT_LINE('staff_name department name designation salary status');
+DBMS_OUTPUT.PUT_LINE(all_data.staff_name||all_data.dept||all_data.design||all_data.staff_sal||status);
+ELSE
+RAISE ERROR_occur;
+END IF;
+END LOOP;
+CLOSE C;
+EXCEPTION 
+WHEN ERROR_occur THEN 
+DBMS_OUTPUT.PUT_LINE('INVALID STAFF CODE');
+END;
+/
+
+BEGIN
+GET_IN();
+END;
+/
+
+***************************************************************************************************************************************************************************
+
+4.7
+
+
+CREATE OR REPLACE PROCEDURE UPDATE_SAL
+(s_code IN staff_master.staff_code%TYPE) IS
+CURSOR c1 IS SELECT staff_sal,hiredate FROM staff_master WHERE staff_code=s_code;
+staff_master_back staff_master%ROWTYPE;
+all_data c1%ROWTYPE;
+exper NUMBER(5);
+no_record_found EXCEPTION;
+BEGIN
+IF NOT c1%ISOPEN THEN
+OPEN c1;
+END IF;
+LOOP
+FETCH c1 INTO all_data;
+IF c1%FOUND THEN
+staff_master_back.staff_sal:=all_data.staff_sal;
+exper:=round(sysdate-all_data.hiredate);
+IF(exper<2)then
+all_data.staff_sal:=all_data.staff_sal;
+ELSIF(exper>2 and exper<5)then
+all_data.staff_sal:=(all_data.staff_sal*.20)+all_data.staff_sal;
+ELSE
+all_data.staff_sal:=(all_data.staff_sal*.22)+all_data.staff_sal;
+END IF;
+DBMS_OUTPUT.PUT_LINE('staff new sal:'||all_data.staff_sal);
+DBMS_OUTPUT.PUT_LINE('staff old sal:'||staff_master_back.staff_sal);
+EXIT;
+ELSE
+RAISE no_record_found;
+END IF;
+END LOOP;
+CLOSE c1;
+EXCEPTION 
+WHEN no_record_found THEN 
+DBMS_OUTPUT.PUT_LINE('INVALID STAFF CODE');
+END UPDATE_SAL;
+/
+
+DECLARE 
+S_code staff_master.staff_code%TYPE:=&staffcode;
+BEGIN
+UPDATE_SAL(S_code);
+END;
+/
+
+***************************************************************************************************************************************************************************
+
+4.8
+
+CREATE OR REPLACE PROCEDURE BOOK_DETAILS
+(b_code IN book_transactions.book_code%TYPE)IS
+CURSOR c1 IS SELECT 
+s.staff_code,s.staff_name,s.design_code,de.design_name,
+b.book_issue_date,b.book_expected_return_date,
+b.book_actual_return_date,st.student_code,st.student_name 
+FROM staff_master s inner join designation_master de 
+on(s.design_code=de.design_code)
+inner join book_transactions b 
+on(b.staff_code=s.staff_code)
+inner join student_master st 
+on(st.student_code=b.student_code)
+where b.book_actual_return_date is null and
+b.book_code=b_code;
+all_data c1%ROWTYPE;
+no_record_found EXCEPTION;
+BEGIN
+IF NOT c1%ISOPEN THEN
+OPEN c1;
+END IF;
+LOOP
+FETCH c1 INTO all_data;
+IF c1%FOUND THEN
+DBMS_OUTPUT.PUT_LINE('Staff Code'||all_data.staff_code);
+DBMS_OUTPUT.PUT_LINE('Staff Name'||all_data.staff_name);
+DBMS_OUTPUT.PUT_LINE('Student Code'||all_data.student_code);
+DBMS_OUTPUT.PUT_LINE('Student Name'||all_data.student_name);
+DBMS_OUTPUT.PUT_LINE('Designation'||all_data.design_name);
+DBMS_OUTPUT.PUT_LINE('Issue Date'||all_data.book_issue_date);
+DBMS_OUTPUT.PUT_LINE('Expected Ret_Date'||all_data.book_expected_return_date);
+DBMS_OUTPUT.PUT_LINE('Actual Ret_Date'||all_data.book_actual_return_date);
+EXIT;
+ELSE
+RAISE no_record_found;
+END IF;
+END LOOP;
+CLOSE c1;
+EXCEPTION 
+WHEN no_record_found THEN 
+DBMS_OUTPUT.PUT_LINE('no details are present');
+END BOOK_DETAILS;
+/
+
+DECLARE 
+b_code book_transactions.book_code%TYPE:=&bookcode;
+BEGIN
+book_details(b_code);
+END;
+/
+
+***************************************************************************************************************************************************************************
+
+4.9
+
+CREATE PACKAGE BODY STAFF_DETAILS AS
+CURSOR C IS create table staff_allowance AS select staff_code,hiredate,(round(sysdate-hiredate)/365) AS "EXPERIENCE",
+(round(sysdate-hiredate)/365)*3000 AS "Additional Allowance" from staff_master;
+all_details staff_master%ROWTYPE;
+FUNCTION experience(hiredate IN DATE)RETURN NUMBER
+IS Experience_Yrs NUMBER;
+BEGIN
+Experience_Yrs:=FLOOR(ROUND((SYSDATE-hire_date)/365,1));
+RETURN Experience_Yrs;
+END
+PROCEDURE staff_allowance(staffcode OUT NUMBER,DOJ OUT DATE,Experience OUT NUMBER,Add_allowance OUT_NUMBER)
+IS
+BEGIN
+IF NOT C%ISOPEN THEN
+OPEN C;
+END IF;
+LOOP
+FETCH C INTO all_data;
+IF C%FOUND THEN
+DBMS_OUTPUT.PUT_LINE('staff code is'||all_details.staff_code);
+DBMS_OUTPUT.PUT_LINE('staff date of joining is'||all_details.hiredate);
+DBMS_OUTPUT.PUT_LINE('staff experience is'||all_details.EXPERIENCE);
+DBMS_OUTPUT.PUT_LINE('staff code is'||all_details.Additional Allowance);
+ELSE
+EXIT;
+END IF;
+END LOOP;
+CLOSE C;
+END staff_allowance;
+END STAFF_DETAILS;
+/
+
+BEGIN
+GET_IN();
+END;
+/
+
+***************************************************************************************************************************************************************************
+
+4.10
+
+CREATE OR REPLACE PROCEDURE bookdetail(bookcode IN varchar,code varchar)
+IS
+no_data_found EXCEPTION;
+return_Date varchar(10);
+day varchar(10);
+BEGIN
+day:=to_char(sysdate+10,'day');
+if(day:='saturday') or (day:='sunday')
+then
+if(day:='saturday')then
+return_date=sysdate+12;
+elsif(day:='sunday')then
+return_date=sysdate+11;
+else
+return_date=sysdate+10;
+end if;
+insert into book_transaction(book_code,student_code,book_issue_date,book_expected_return_date) 
+values (bookcode,code,sysdate,return_date)
+where book_code=bookcode and (student_code=code or staff_code=code);
+END
+/
+
+***************************************************************************************************************************************************************************
+
+4.11
+
+CREATE OR REPLACE FUNCTION get_total_records
+(table_name IN VARCHAR2) RETURN NUMBER IS
+No_of_records NUMBER;
+BEGIN
+EXECUTE IMMEDIATE 'SELECT COUNT(*) FROM'||table_name into No_of_record;
+DBMS_OUTPUT.PUT_LINE(No_of_records);
+RETURN No_of_records;
+END;
+/
+
+SELECT get_total_records('emp') FROM dual;
+
+***************************************************************************************************************************************************************************
+
+4.12
+
+CREATE OR REPLACE PROCEDURE update_salary (emp_id IN NUMBER) IS     
+v_name VARCHAR2(15);  
+v_sal NUMBER;  
+v_newsal NUMBER;  
+BEGIN    
+execute immediate 'CREATE TABLE emp_copy AS SELECT * from emp';
+execute immediate 'SELECT ename,sal(UPDATE emp SET sal = sal * 1.1 
+WHERE empno = emp_id) AS "NEW SAL" INTO v_name, v_sal, v_newsal    
+FROM emp_copy    WHERE empno = emp_id';  
+DBMS_OUTPUT.PUT_LINE('Emp Name:' || v_name);    
+DBMS_OUTPUT.PUT_LINE('Current sal:' || v_sal);  
+DBMS_OUTPUT.PUT_LINE('New sal:' || v_newsal);  
+END update_salary; 
+
+***************************************************************************************************************************************************************************
+
+4.14
+
+CREATE OR REPLACE PROCEDURE GETIN(DEPT IN NUMBER) IS   
+CURSOR C IS select ename,job,sal,comm from emp where deptno=dept;
+ALL_DATA C%ROWTYPE;
+no_emp number(4):=0;
+total_sal number(5):=0;
+max_sal number(5):=0;
+avg_sal number(5);
+ERROR_occur EXCEPTION;
+BEGIN
+IF NOT C%ISOPEN THEN
+OPEN C;
+END IF;
+LOOP
+FETCH C INTO all_data;
+DBMS_OUTPUT.PUT_LINE('Employee name:'||all_data.ename);
+DBMS_OUTPUT.PUT_LINE('Employee job:'||all_data.job);
+DBMS_OUTPUT.PUT_LINE('Employee salary:'||all_data.sal);
+DBMS_OUTPUT.PUT_LINE('Employee comission:'||all_data.comm);
+DBMS_OUTPUT.PUT_LINE('***************************************');
+total_sal:=total_sal+all_data.sal;
+no_emp:=no_emp+1;
+ELSE RAISE ERROR_occur;
+END IF;
+END LOOP;
+avg_sal:=total_sal/no_emp;
+DBMS_OUTPUT.PUT_LINE('Total employee:'||no_emp);
+DBMS_OUTPUT.PUT_LINE('Total salary:'||total_sal);
+DBMS_OUTPUT.PUT_LINE('Average salary:'||avg_sal);
+CLOSE C;
+EXCEPTION 
+WHEN ERROR_occur THEN 
+DBMS_OUTPUT.PUT_LINE('INVALID DEPARTMENT CODE');
+END;
+/
+
+***************************************************************************************************************************************************************************
+
+5.2
+
+CREATE OR REPLACE PROCEDURE accept
+(c_name varchar2,c_address varchar2,c_type varchar2,acc varchar2)
+AS
+BEGIN
+INSERT INTO CUSTOMER_MASTERS(cust_name,address,customer_type)
+VALUES(c_name,c_address,c_type);
+INSERT INTO ACCOUNT_MASTERS(account_type)VALUES(acc);
+END;
+/
+
+***************************************************************************************************************************************************************************
+
+5.3
+
+CREATE OR REPLACE PROCEDURE acceptvalues
+(C_id in number,amount1 in number,acc_number_from in number,
+acc_number_to in number) as
+v_amount number(6);
+v_id number(6):=0;
+v_amt_from number(6):=0;
+v_amt_to number(6):=0;
+not_valid_exception;
+BEGIN
+select cust_id,from_account_number,to_account_number,amount into
+v_id,v_amt_from,v_amt_to,v_amount
+from account_master a,transaction_master t
+where cust_id=c_id and from_account_number=acc_number_from
+and to_account_number=acc_number_to and 
+a.acc_num=t.acc_number;
+if (v_id!=0) and (v_amt_from!=0) and (v_amt_to!=0) then
+if (v_amount>=amount1) then
+update transaction_master
+set amount=amount-amount1;
+else
+dbms_output.put_line('Not valid amount');
+END IF;
+ELSE
+raise not_valid;
+END IF;
+EXCEPTION
+when not_valid then 
+dbms_output.put_line('Not valid');
+when others then
+dbms_output.put_line('Error');
+END;
+/
+
+***************************************************************************************************************************************************************************
