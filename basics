@@ -49,3 +49,55 @@ JOINS
 LEFT JOIN(SELECT table1.col1,table1.col2,table2.col1,....FROM table1 LEFT JOIN table2 ON table1.matching_column = table2.matching_column;)
 RIGHT JOIN(SELECT table1.col1,table1.col2,table2.col1,....FROM table1 RIGHT JOIN table2 ON table1.matching_column = table2.matching_column;)
 FULL JOIN(SELECT table1.col1,table1.col2,table2.col1,....FROM table1 FULL JOIN table2 ON table1.matching_column = table2.matching_column;)
+_____________________________________________________
+Ef Codd Rules:
+1)MySQL Create Database
+MySQL create database is used to create database. For example
+create database/table db1;   
+
+2) MySQL Select/Use Database
+MySQL use database is used to select database. For example
+use db1;   
+
+3)MySQL Create Query
+MySQL create query is used to create a table, view, procedure and function. For example:
+
+CREATE TABLE customers    
+(id int(10),    name varchar(50),     city varchar(50),   PRIMARY KEY (id )    );    
+
+4) MySQL Alter Query
+MySQL alter query is used to add, modify, delete or drop colums of a table. Let's see a query to add column in customers table:
+ALTER TABLE customers   
+ADD age varchar(50); 
+
+5) MySQL Insert Query
+MySQL insert query is used to insert records into table. For example:
+insert into customers values(101,'rahul','delhi');  
+
+6) MySQL Update Query
+MySQL update query is used to update records of a table. For example:
+update customers set name='bob', city='london' where id=101;  
+
+7) MySQL Delete Query
+MySQL update query is used to delete records of a table from database. For example:
+delete from customers where id=101;  
+
+8) MySQL Select Query
+Oracle select query is used to fetch records from database. For example:
+SELECT * from customers;  
+
+9) MySQL Truncate Table Query
+MySQL update query is used to truncate or remove records of a table. It doesn't remove structure. 
+truncate table customers;  
+
+10) MySQL Drop Query
+MySQL drop query is used to drop a table, view or database. It removes structure and data of a table if you drop table. 
+drop table customers;  
+
+11) Creating the the table by using the Foreign key
+CREATE TABLE Orders (  ID int NOT NULL,  Number int NOT NULL,PersonID int,PRIMARY (ID),
+  FOREIGN KEY (PersonID) REFERENCES Persons(PersonID)	);
+
+CREATE TABLE table1 (column1 int NOT NULL, column2 int NOT NULL,
+  FOREIGN KEY(column1) REFERENCES table2(column3),
+  FOREIGN KEY(column2) REFERENCES table3(column4)		);
