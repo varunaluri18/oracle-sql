@@ -1,0 +1,526 @@
+6th July
+Oracle
+
+Data:Data is a collection of a distinct small unit of information. It can be used in a variety of forms like text, numbers, media, bytes, etc.
+
+Types of Data 
+. Structured Data - Having schema
+Eg: Traditional RDBMS Data,Excel 
+. Semi Structured Data - Having semi structured schema
+Eg: XMl Files,Web Blogs,E-mails
+. Un-Structured Data - Not having schema
+Eg: Audio, Video Files, etc.,
+
+
+Data Base:A database is an organized collection of data, so that it can be easily accessed and managed.
+	
+DBMS (Data Base Management System):
+It is a software tool that is used to store, maintain, manage data in the data base.
+Types of Data Bases:
+Relational databases
+Hierarchical databases
+Network databases
+Object-oriented databases
+Graph databases
+ER model databases
+Document databases
+NoSQL databases
+
+Falt Files: .CSV, .txt
+
+Architecture of DBMS:
+lt is a 3 level system
+. External Level (End user can acess the data base)
+. Conceputal Level (All the RDBMS function will resides)
+. Physcial/Internal Level (where the Physcial storage will provides)
+
+RDBMS:
+An RDBMS is a type of database management system (DBMS) that stores data in a row-based table structure which connects related data elements. 
+An RDBMS includes functions that maintain the security, accuracy, integrity and consistency of the data. This is different than the file storage used in a DBMS.
+
+RDBMS was introduced by EF Codd:
+There are having 13(0-12) Codd Rule
+Each row in a table is represented as an indiidual reccord.
+Each column is represented as a field.
+
+ACID Rules
+Atomicity:
+. The term atomicity defines that the data remains atomic. 
+  It means if any operation is performed on the data, either it should be performed or executed completely or should not be executed at all. 
+  It further means that the operation should not break in between or execute partially. 
+  In the case of executing operations on the transaction, the operation should be completely executed and not partially.
+Consistency:
+. The word consistency means that the value should remain preserved always. 
+  In DBMS, the integrity of the data should be maintained, which means if a change in the database is made, it should remain preserved always. 
+  In the case of transactions, the integrity of the data is very essential so that the database remains consistent before and after the transaction. 
+  The data should always be correct.
+Isolation:
+. The term 'isolation' means separation. 
+  In DBMS, Isolation is the property of a database where no data should affect the other one and may occur concurrently. 
+  In short, the operation on one database should begin when the operation on the first database gets complete. 
+  It means if two operations are being performed on two different databases, they may not affect the value of one another. 
+  In the case of transactions, when two or more transactions occur simultaneously, the consistency should remain maintained. 
+  Any changes that occur in any particular transaction will not be seen by other transactions until the change is not committed in the memory.
+Durability:
+. Durability ensures the permanency of something. 
+  In DBMS, the term durability ensures that the data after the successful execution of the operation becomes permanent in the database. 
+  The durability of the data should be so perfect that even if the system fails or leads to a crash, the database still survives. 
+  However, if gets lost, it becomes the responsibility of the recovery manager for ensuring the durability of the database. 
+  For committing the values, the COMMIT command must be used every time we make changes
+
+SQL (Structured Queri Language)
+Sql is based on ANSI standards(American National Standerds Institue)
+Eg: MySQl, Oracle, SQL Server,DB2, PostGre SQL, Ansi SQl.
+
+Sql Commands are divided into 5 categories
+. DML(Data Manipulation Language)
+Delete,Insert,Update,Merge
+. DDL(Data Definition Language)
+Create,Truncate,Alter,Drop
+. DCL(Data Control Language)
+Revoke,Grant
+. DQL(Data Query Language)
+Select
+. TCL(Transcation Control Language)
+Commit,RollBack,Savepoint
+__________________________________________
+
+13-07-2021
+Oracle SQL
+
+DQL
+SELECT 
+FROM
+WHERE - Is used to specify the criteria fo selection
+WHERE, GROUP BY,HAVING,ORDER BY,UNION
+Mathematical
++,-,*,/
+Comparision
+Logical
+AND,OR,NOT
+BETWEEN...AND
+IN
+LIKE
+
+SINGLE ROW FUNCTION:
+Numerical Functions(MOD,ABS,CEIL,FLOOR,TRUNC,ROUND,POWER)
+characteral Functions(CONCAT,LPAD,RPAD,TRIM,RTRIM,LENGTH,SUBSTR,LOWER,UPPER,INITCAP)
+Date & Time(SYSDATE,ADD_MONTHS,LAST_DAY,MONTH_BETWEEN,NEXT_DAY,CURRENT_TIMESTAMP,EXTRACT(datetime))
+Conversion Functions(TO_CHAR,TO_DATE,TO_NUMBER,TO_TIMESTAMP,CAST,ASCIISTR,ROWIDTOCHAR)
+Misclleanious Functions(BFILE,DECODE,NVL,NVL2,NULLIF,USERNV,CASE)
+
+GROUP FUNCTIONS/MULTIPLE ROW GUNCTIONS:
+SUM
+AVG
+COUNT
+MIN
+MAX
+
+JOINS AND SUB QUERIES:
+Joins:
+Cartesion Join(Cross Joins)
+Outer Join(Left,Right,Full Outer Join)
+Equi Join(Inner Join(Natural Join))
+Self Join(Join on)
+Non Equi Join(Join on)
+
+USING CLAUSE for Equi Join
+It is used for if the data types of the primary key and foreign key in 2 different tables
+Eg: 
+select student_code,student_name,dept_code,dept_name 
+from student_master
+join department_master
+using(dept_code,dept_code);
+_________________________
+14-07-2021
+Sub Query:
+It is a form of an SQL statement that appears inside another SQL Statement.
+It is also called as Nested Query.
+
+Eg:select stdid,stdname 
+   from student
+   where deptcode=(select deptcode from dept wheredeptname='Mechanical')
+
+Uses:
+. Insert records in a target table
+. Create tables and insert records in the table created
+. Update records in the target table
+. Create views
+
+Tyeps of Nested queries:
+. Single Row
+. Multiple Row
+. Co-Related Sub Query
+
+Eg: Display staff details whose sal is greater than the average sal in their own department?
+select staff_id,staff_name,staff_sal,staff_code
+from staff_master 
+where staff_sal > (select avg(staff_sal) 
+		   from staff_master m
+		   where s.dept_code=m.dept_code)
+
+Connect By and Start with Clauses:
+Start with..Connect by 
+Eg: List Allen and his Sub-Ordintes
+select staff_id,staff_name,mgr_code
+from staff_master s
+connect by prior staff_code = mgr_code
+start with staff_name = 'Allen';
+
+connect by prior
+connect by root
+connect by isleaf
+connect by iscycle
+
+SET OPERATORS
+
+. Union All (Retains all data with the Duplicate and Null values and sorted in Asc order)
+Eg: Display all students who are listed from 2006,2007 and both years.
+select stud_code from student_Marks 
+where student_year=2006
+UNION 
+select stud_code from student_Marks
+where student_year=2007
+
+. Union (Remove Duplicates)
+Eg: Display all students who are listed from 2006,2007 and both years.
+select stud_code from student_Marks 
+where student_year=2006
+UNION ALL
+select stud_code from student_Marks
+where student_year=2007
+
+. Minus(It will show only Unique values)
+Eg: Return all Rows retreived by the first query but not by the second query
+select student_marks from student_Marks
+where student_year=2006
+MINUS
+select student_marks from student_Marks
+where student_year=2007
+
+. Intersect
+Eg: Returns those rows which are retrived by both the queries
+select student_marks from student_Marks
+where student_year=2006
+INTERSECT
+select student_marks from student_Marks
+where student_year=2007
+
+Scalar Data Types
+BLOB - Binary Large Object
+CLOB - Character Large Object
+NCLOB - National Charcter Set Large Object 
+BFILE - External Binary File
+
+DATA BASE OBJECTS
+. Table
+. Index
+. Synonym
+. Sequence
+. View
+. Cluster
+. Procedure
+. Functions
+. Packages
+. Triggers
+
+Information about existing objects can be retrived from dba_/user_/all_objects
+_________________________________________________
+15th_July_2021
+
+Tables:
+Tables are objects which is used to store the data
+Create table tablename(col1 dt1,col2 dt2.......coln dtn)
+
+Data Integrity:
+Oracle uses Integrity constraint
+Eg:staff_sal column of staff_masters table
+Table Level Constraint
+create table table_name(
+			col1 dt1,col2 dt2.......coln dtn
+			[Constraint constraint_name]constraint_type(column....))
+Types of Integrity Constraints
+* Not Null
+* Unique
+* Primary Key
+* Foreign Key
+
+. Not Null
+Eg: create table student (
+	std_id number(4) NOOT NULL,
+	dept_code number(4) constraint dept_code_nn not null);
+. Unique
+No two records having same attribute names
+Eg: create table stu_master(
+	student_code number(4),
+	student_name varchar2(10),
+	CONSTRAINT stu_id_uk UNIQUE(student_code));
+. Primary Key
+Eg: create table stu_master(
+	student_code number(4),
+	student_name varchar2(10),
+	CONSTRAINT stu_id_uk PRIMARY KEY(student_code));
+CHECK:
+Eg: create table staff_master(
+	staff_code number(4),
+	staff_name varchar2(10),
+	staff_sal number(10,2) CONSTRAINT staff_sal_min CHECK (staff_sal>1000)
+. Foreign Key
+Eg: create table staff_master(
+	staff_code number(4),
+	dept_code number(4) CONSTRAINT staff_dept_fk
+	REFERNCE dept_master(dept_code),
+	staff_name varchar2(20));
+
+ALTER with examples:
+ALTER table std_master
+ADD (last_name varchar2(20));
+
+ALTER table std_master
+MODIFY (sstaff_sal number(12,2));
+
+ALTER table std_master
+DROP CONSTRAINT stu_dept_fk;
+
+ALTER table std_master
+DROP COLUMN staff_sal;
+
+INDEX:
+It is a data bse object that functions as a performance tuning method for allowing faster retriveal of records
+Index creates an entry for each value that appears in the indexed columns.
+
+Eg: 
+create INDEX staff_index ON staff_master(staff_sal);
+create UNIQUE INDEX staff_ename ON staff_master(staff_name);
+
+BITMAP Index
+It is useful for some types of SQL statements like
+select count(*) from staff_master;
+
+SYNONYM:
+Is an alias that is used for any table,view,materilized view,sequence,orocedure,function or package.
+CREATE[PUBLIC] SYNONYM another_name FOR existing_name;
+The query wasexecuted by only DB Administration People.
+
+Sequence
+It is an object which can be used generate sequence numbers
+NEXTVAL
+CREATE SEQUENCE s1
+	INCREMENT BY 1
+	START WITH 1
+	MAXVALUE 10000
+	NOCYCLE;
+
+DML(Data Manipulation Language)
+. Insert - It is used to insert new rows into the table
+Eg: insert into tablename 
+	values(1001,'xyz','1-Jan-2011','Hyderabad');
+. Delete - It is used to delete rows from table
+. Update - It is used to change the single row/multiple rows/entire table data
+. Merge - It is used mostly used in DWH environments to build the data in ware house 
+
+TCL(Transaction Control Language)
+. Commit (Making a transcation is permanent)
+Eg: COMMIT [WORK];
+. Roll Back (Undoing the change/uncommiting the transcations)
+. Save Point (Till where ever we committed is the save point)
+
+DCL(Data Control Language)
+. Grant (User can give the previlises to the others )
+. Revoke (Take back the permissions)
+__________________________________________________________
+ 16 July 
+Data Ware House
+Business Intelligence:
+. BI is used for enhancement and optimization of organizational performance and opearation.
+OLTP - Online Transactional Processing System (Transactional Data, Current Data)
+OLAP - Online Analytical Processing System (Master System, Master Data)
+Types of OLAP's:
+. R OLAP 
+. M OLAP
+. H OLAP
+
+Characteristics of a DWH
+. Subject-Oriented
+. Integrated
+. Non-Nolatile
+. Time-Varient
+
+Types of data marts
+. Dependent DM
+. Independent DM
+
+ETL - Extract,Transform,Load
+Extract - Data Extracting and stagging
+Transform - Convert to format required by the DWH
+. Data Cleaning
+. Selecting only particular columns to load
+. Translate the code values
+. Encode free form values
+. Derive a new calculate value
+. Joining data together from multiple sources
+Load - Load data to data warehouse
+ Indexes to be droped before loading and recreated after loading the DWH
+. Bulk Load
+. Full Refresh
+. Incremental Load
+
+Meta Data:
+. Dimension
+. Attribute
+. Fact
+. Measure
+
+Types of OLPA operations:
+. Roll Up(drill up)
+. Drill Down(roll down)
+. Slice and Dice
+. Pivot
+. Drill Across
+. Drill Through
+_____________________________________________________
+23-07-2021
+
+Windows_function:
+select name,age,dept,sal
+average(sal) OVER( PARTITION BY dept order by age) as avg_sal
+from emp;
+
+Ranking:
+RANK,DENSE_RANK,ROW_NUMBER
+
+-->Value Window Functions
+.FIRST_VALUE()
+ FIRST_VALUE(expression) OVER(
+ Partition_clause
+ Order_clause
+ Frame_clause
+ )
+Eg: select ename,sal FIRST_VALUE(ename) OVER(ORDER BY sal) lowest_sal from emp;
+ 
+ .LAG()
+ syntax: LAG(return_value[offset[default_value]]) OVER(
+ PARTITION BY expr1,expr2
+ ORDER BY expr1[ASC|DESC],expr2,.........
+ )  
+
+
+ .LAST_VALUE()
+ .LEAD(): quite opposite to the LAG() function	
+-->Rank Window Functions
+ .CUME_DIST():N/total_rows,
+ .DENSE_RANK():It will assisn the rank function for each partition
+ .NTILE():
+ .PERCENT_RANK()
+ .ROW_NUMBER()
+-->Aggrigate Window Functions
+ AVG()
+ COUNT()
+ MAX()
+ MIN()
+ SUM()
+
+Regular Expressions(Regex):
+combination of different data types like integer,special characters,strings,...etc,
+
+Features of Regex:
+.powerful and flexible pattern search.
+.support number of meta characters for more flexibilty and control when performing pattern matching.
+.Backslash character as an escape Character.
+
+syntax for Regex
+SELECT statement.....WHERE field_name REGEXP 'my-pattern';
+____________________________________
+
+02/Aug/21
+
+Oracle PL/SQL:
+.Client Application Server - Server(3 tiers)
+.Cliet - Server(2 tier)
+.Host - Based
+
+Memory Structure
+SGA(System Global Area)
+PGA(Program Global Area)
+
+DB_CACHE_SIZE
+DB_KEEP_CACHE_SIZE
+DB_RECYCLE_CACHE_SIZE
+DB_RECYCYLE_CACHE_SIZE
+DB_nk_CACHE_SIZE
+
+Data Dictionary Tables
+.Base Tables - sql.bsq
+.Data Dictionary views - catlog.sql
+.Data Dictionary
+.DBA - DBA_Views SELECT_ANY_TABLE
+.ALL
+.USER
+
+SELECT owner,object_name,object_type FROM user_objects
+SELECT owner,object_name,object_type FROM ALL_objects
+
+Types of PL/SQl variables
+pl/sql varibles
+.scalar
+.composite
+.reference
+.LOB(large objects)
+Non-pl/sql variables
+Bind and Host variables
+Identifier[CONSTANT] dataype[NOTNULL][:=|DEFAULT expr];
+
+Eg:
+DECLARE
+	nrecord staff_master%rowtype
+BEGIN
+	select * into nrecord
+		FROM staff_master
+		WHERE staff_code=100001;
+		UPDATE staff_master
+		SET staff_sal=staff_sal+101
+		WHERE emp_code=100001;
+END;
+/
+
+PROCEDURES:
+CREATE OR REPLACE PROCEDURE greetings AS
+BEGIN
+	Dbms_output.put_line('Hello INDIA')
+END;
+EXECUTR greetings
+/
+
+.IN
+.OUT
+.IN OUT
+
+Eg:
+DECLARE 
+	A number
+	B number
+	C number
+procedures findMin(x IN number,y IN number,z OUT number) IS
+BEGIN 
+IF x<y THEN
+z:=x
+ELSE
+z:=y
+END IF;
+END;
+BEGIN
+	A:=23;
+	B:=45;
+	findMin(a,b,c);
+	Dbms_output.put_line('Minimum of(23,45):'||c);
+END;
+/
+
+
+Methods for passing parameters
+.Positional Noatation
+findmin(a,b,c);
+.Named Noatation
+findmin(x=>a,y=>b,z=>c);
+.Mixed Noatation
+findmin(a,>b,z=>c);	
