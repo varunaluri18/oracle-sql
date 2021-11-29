@@ -1,0 +1,48 @@
+create table dept(deptno number(2,0),dname varchar2(14),loc  varchar2(13),constraint pk_dept primary key (deptno));
+insert into dept values(10, 'ACCOUNTING', 'NEW YORK');
+insert into dept values(20, 'RESEARCH', 'DALLAS');
+insert into dept values(30, 'SALES', 'CHICAGO');
+insert into dept values(40, 'OPERATIONS', 'BOSTON');
+ 
+create table emp(empno number(4),ename varchar(6),job varchar(14),mgr number(4),hiredate date,sal number(4),comm number(4),deptno number(2),constraint pk_emp primary key (empno));
+insert into emp values( 7839, 'KING', 'PRESIDENT', null, to_date('17-11-1981','dd-mm-yyyy'),5000, null, 10);
+insert into emp values( 7698, 'BLAKE', 'MANAGER', 7839,to_date('1-5-1981','dd-mm-yyyy'), 2850, null, 30);
+insert into emp values( 7782, 'CLARK', 'MANAGER', 7839, to_date('9-6-1981','dd-mm-yyyy'), 2450, null, 10);
+insert into emp values( 7566, 'JONES', 'MANAGER', 7839, to_date('2-4-1981','dd-mm-yyyy'), 2975, null, 20);
+insert into emp values( 7788, 'SCOTT', 'ANALYST', 7566, to_date('13-JUL-87','dd-mm-rr') - 85, 3000, null, 20);
+insert into emp values( 7902, 'FORD', 'ANALYST', 7566, to_date('3-12-1981','dd-mm-yyyy'), 3000, null, 20);
+insert into emp values( 7369, 'SMITH', 'CLERK', 7902, to_date('17-12-1980','dd-mm-yyyy'),800, null, 20);
+insert into emp values( 7499, 'ALLEN', 'SALESMAN', 7698, to_date('20-2-1981','dd-mm-yyyy'), 1600, 300, 30);
+insert into emp values( 7521, 'WARD', 'SALESMAN', 7698, to_date('22-2-1981','dd-mm-yyyy'), 1250, 500, 30);
+insert into emp values( 7654, 'MARTIN', 'SALESMAN', 7698,to_date('28-9-1981','dd-mm-yyyy'),1250, 1400, 30);
+insert into emp values( 7844, 'TURNER', 'SALESMAN', 7698,to_date('8-9-1981','dd-mm-yyyy'),1500, 0, 30);
+insert into emp values( 7876, 'ADAMS', 'CLERK', 7788, to_date('13-JUL-87', 'dd-mm-rr') - 51, 1100, null, 20);
+insert into emp values( 7900, 'JAMES', 'CLERK', 7698, to_date('3-12-1981','dd-mm-yyyy'), 950, null, 30);
+insert into emp values( 7934, 'MILLER', 'CLERK', 7782, to_date('23-1-1982','dd-mm-yyyy'), 1300, null, 10);
+commit;
+
+select mgr from employee1;
+select nvl(mgr,0) from employee;
+select nvl2(mgr,0,1) from employee1;
+select nullif(deptno,10)from employee1;
+select * from dept;
+select ename,dname from emp,dept d where emp.deptno=d.deptno;
+select s.staff_name,s.staff_sal,sl.grade from staff_master s,salgrade s1 where staff_sal between s1.losal and s1.hisal;
+select e.name"emp name",m.ename"mgr name" from emp e,emp mwhere e.mgr=m.empno;
+select empno,ename,mgr from employee1;
+select ename from emp where ename like 'dar%_a' ;
+select count(ename) from emp where ename like'%%x';
+select sal from emp order by[column_sal] asc|desc;
+select floor((sysdate-hiredate)/365) from emp;
+select(sysdate-hiredate)/365)from emp;
+select sal AS salary from emp;
+select sum(sal) AS totalsalary from emp;
+select min(sal) from emp;
+select max(sal) from emp;
+select avg(sal) from emp;
+select sum(sal)*12 as totalsalary from emp;
+select count(*)from emp;
+select count(mgr)from emp;
+select count(deptno)from emp;
+select floor((sysdate-hiredate)/365) FROM emp;
+
